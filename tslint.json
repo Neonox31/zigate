@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "tslint-config-standard",
+    "tslint-config-prettier"
+  ],
+  "no-angle-bracket-type-assertion": false,
+  "no-unused-variable": [true, {"ignore-pattern": "^_"}]
+}

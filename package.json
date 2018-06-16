@@ -1,0 +1,122 @@
+{
+  "name": "@neonox31/zigate",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "dist/zigate.umd.js",
+  "module": "dist/zigate.es5.js",
+  "typings": "dist/types/zigate.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "WEBER Logan <weberlogan@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Neonox31/zigate"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "lint": "tslint -t codeFrame --project tsconfig.json '@(src|test)/**/*.ts'",
+    "prebuild": "rimraf dist",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts",
+    "build:docs": "typedoc --out docs --target es6 --theme minimal --mode file src",
+    "start": "rollup -c rollup.config.ts -w",
+    "test": "jest",
+    "commit": "git-cz",
+    "release": "standard-version -m \"chore(release): version %s\" -t \"\"",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    }
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    },
+    "collectCoverage": false,
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "@types/core-js": "^2.5.0",
+    "@types/jest": "^22.0.0",
+    "@types/lodash": "^4.14.109",
+    "@types/node": "^10.0.3",
+    "colors": "^1.1.2",
+    "commitizen": "^2.9.6",
+    "core-js": "^3.0.0-beta.3",
+    "coveralls": "^3.0.0",
+    "cross-env": "^5.0.1",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.14.0",
+    "jest": "^22.0.2",
+    "lint-staged": "^7.0.0",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.4.4",
+    "prompt": "^1.0.0",
+    "replace-in-file": "^3.0.0-beta.2",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.58.0",
+    "rollup-plugin-commonjs": "^9.0.0",
+    "rollup-plugin-json": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.11.1",
+    "rxjs": "^6.2.1",
+    "standard-version": "^4.4.0",
+    "ts-jest": "^22.0.0",
+    "ts-node": "^6.0.0",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.1.0",
+    "tslint-config-standard": "^7.0.0",
+    "typedoc": "^0.11.0",
+    "typescript": "^2.6.2",
+    "validate-commit-msg": "^2.12.2"
+  },
+  "dependencies": {
+    "@types/bignum": "^0.0.29",
+    "@types/debug": "^0.0.30",
+    "@types/serialport": "^6.0.3",
+    "bignum": "^0.13.0",
+    "debug": "^3.1.0",
+    "serialport": "^6.2.0"
+  }
+}
