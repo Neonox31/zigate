@@ -1,7 +1,7 @@
 import { ZGFrame } from '../src/frame'
 
 describe('ZGFrame', () => {
-  it('should create an empty frame when no buffer is specified', () => {
+  it('should create an empty frame when no specified buffer', () => {
     /*** GIVEN ***/
 
     /*** WHEN ***/
@@ -12,7 +12,7 @@ describe('ZGFrame', () => {
     expect(zgFrame.msgLengthBytes).toEqual(Buffer.from([0, 0]))
     expect(zgFrame.checksumBytes).toEqual(Buffer.from([0]))
     expect(zgFrame.msgPayloadBytes).toEqual(Buffer.from([]))
-    expect(zgFrame.rssiBytes).toEqual(Buffer.from([0]))
+    expect(zgFrame.rssiBytes).toEqual(Buffer.from([]))
   })
 
   it('should create a frame with a specified buffer', () => {

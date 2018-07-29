@@ -80,7 +80,7 @@ export class ZGFrame {
   msgLengthBytes: Buffer = Buffer.alloc(ZGFrameChunkSize.UInt16)
   checksumBytes: Buffer = Buffer.alloc(ZGFrameChunkSize.UInt8)
   msgPayloadBytes: Buffer = Buffer.alloc(0)
-  rssiBytes: Buffer = Buffer.alloc(ZGFrameChunkSize.UInt8)
+  rssiBytes: Buffer = Buffer.alloc(0)
 
   msgLengthOffset = 0
 
@@ -111,7 +111,7 @@ export class ZGFrame {
     this.msgLengthBytes = getFrameChunk(frame, 3, this.msgLengthBytes.length)
     this.checksumBytes = getFrameChunk(frame, 5, this.checksumBytes.length)
     this.msgPayloadBytes = getFrameChunk(frame, 6, this.readMsgLength())
-    this.rssiBytes = getFrameChunk(frame, 6 + this.readMsgLength(), this.rssiBytes.length)
+    this.rssiBytes = getFrameChunk(frame, 6 + this.readMsgLength(), ZGFrameChunkSize.UInt8)
 
     debug('frame')(
       `msg code: %d\nmsg length: %d\nchecksum: %d\nmsg payload: %o\nrssi: %d`,
@@ -124,6 +124,8 @@ export class ZGFrame {
   }
 
   toBuffer(): Buffer {
+    const length = 7 + this.rssiBytes.length + this.readMsgLength()
+
     return Buffer.concat(
       [
         Uint8Array.from([ZGFrame.START_BYTE]),
@@ -134,7 +136,7 @@ export class ZGFrame {
         this.rssiBytes,
         Uint8Array.from([ZGFrame.STOP_BYTE])
       ],
-      8 + this.readMsgLength()
+      length
     )
   }
 
@@ -173,7 +175,7 @@ export class ZGFrame {
   }
 
   writeRSSI(rssi: number): ZGFrame {
-    writeBytes(this.rssiBytes, rssi)
+    this.rssiBytes = Buffer.from([rssi])
     this.writeChecksum()
     return this
   }
