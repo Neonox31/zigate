@@ -31,11 +31,11 @@ const removeDuplicate = (_: any, idx: number, frame: number[][]): boolean => {
   return first !== 0x2
 }
 
-const encodeBytes = (bytesPair: [number, number]): number => {
+const decodeBytes = (bytesPair: [number, number]): number => {
   return bytesPair[0] === 0x2 ? bytesPair[1] ^ 0x10 : bytesPair[0]
 }
 
-// const decodeByte = (byte: number): number[] => {
+// const encodeByte = (byte: number): number[] => {
 //   return byte >= 0x10 ? [byte] : [0x2, byte ^ 0x10]
 // }
 
@@ -55,7 +55,7 @@ const decodeFrame = (frame: Buffer): Buffer => {
   const arrFrame = Array.from(frame)
     .map(combineBytes)
     .filter(removeDuplicate)
-    .map(encodeBytes)
+    .map(decodeBytes)
 
   return Buffer.from(arrFrame)
 }
@@ -63,7 +63,7 @@ const decodeFrame = (frame: Buffer): Buffer => {
 // const encodeFrame = (frame: Buffer): Buffer => {
 //   const arrFrame = Array
 //     .from(frame)
-//     .flatMap(decodeByte)
+//     .flatMap(encodeByte)
 //
 //   return Buffer.from(arrFrame);
 // }
