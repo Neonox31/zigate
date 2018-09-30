@@ -4,6 +4,7 @@ import { ZGXiaomiAqaraButtonDevice } from '../src/devices/xiaomi/aqara-button'
 import { ZiGate } from '../src/zigate'
 import { ZGXiaomiAqaraDoorSensorDevice } from '../src/devices/xiaomi/aqara-door-sensor'
 import { ZGXiaomiAqaraWeatherSensorDevice } from '../src/devices/xiaomi/aqara-weather-sensor'
+import { ZGXiaomiAqaraMagicCubeDevice } from '../src/devices/xiaomi/aqara-magic-cube/aqara-magic-cube'
 
 describe('ZGDevice', () => {
   const zigate = new MockZiGate()
@@ -39,6 +40,17 @@ describe('ZGDevice', () => {
 
     /*** THEN ***/
     expect(zgDevice).toBeInstanceOf(ZGXiaomiAqaraWeatherSensorDevice)
+  })
+
+  it('should create xiaomi aqara magic cube device', () => {
+    /*** GIVEN ***/
+    const deviceType = ZGDeviceType.XiaomiAqaraMagicCube
+
+    /*** WHEN ***/
+    const zgDevice = createZGDevice(zigate as ZiGate, deviceType, 'fefe')
+
+    /*** THEN ***/
+    expect(zgDevice).toBeInstanceOf(ZGXiaomiAqaraMagicCubeDevice)
   })
 
   it('should fail when specified device type is unknown', () => {

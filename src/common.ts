@@ -33,12 +33,17 @@ export interface CommonReedSwitchPayload {
 
 export interface CommonRemotePayload {
   shake?: boolean
-  slide?: boolean
-  rotation?: {
-    axis?: CommonAxis
+  flip?: {
     degrees?: number
+    fromFace?: number
+    toFace?: number
   }
-  tap?: boolean
+  push?: {
+    face?: number
+  }
+  doubleTap?: {
+    face?: number
+  }
 }
 
 export interface CommonLightPayload {
