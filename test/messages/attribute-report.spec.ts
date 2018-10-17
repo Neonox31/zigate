@@ -64,6 +64,22 @@ describe('ZGAttributeReportMessage', () => {
     expect(zgMsg.getPayload().attributeData).toEqual(1)
   })
 
+  it('should recognize 8 bitmap attribute type', () => {
+    /*** GIVEN ***/
+    attributeSize.writeUInt16BE(1, 0)
+    attributeType.writeUInt16BE(AttributeType.BitMap8, 0)
+    const attributeData = Buffer.alloc(attributeSize.readUInt16BE(0))
+    attributeData.writeUInt8(1, 0)
+    const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
+
+    /*** WHEN ***/
+    const zgMsg = new ZGAttributeReportMessage(code, payload)
+
+    /*** THEN ***/
+    expect(typeof zgMsg.getPayload().attributeData).toBe('number')
+    expect(zgMsg.getPayload().attributeData).toEqual(1)
+  })
+
   it('should recognize uint8 attribute type', () => {
     /*** GIVEN ***/
     attributeSize.writeUInt16BE(1, 0)

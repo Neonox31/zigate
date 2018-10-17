@@ -66,3 +66,7 @@ export interface CommonPressurePayload {
 export interface CommonMotionPayload {
   state?: boolean
 }
+
+export interface CommonBrightnessPayload {
+  level?: number
+}
