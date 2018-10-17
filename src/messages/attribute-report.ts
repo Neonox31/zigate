@@ -6,6 +6,7 @@ type AttributeData = number | string | boolean | null
 export enum AttributeType {
   Null = 0x0,
   Boolean = 0x10,
+  BitMap8 = 0x18,
   UInt8 = 0x20,
   UInt16 = 0x21,
   UInt32 = 0x22,
@@ -39,6 +40,7 @@ const attributeDataFromBuffer = (
       return null
     case AttributeType.Boolean:
       return payload.readUInt8(0) === 1
+    case AttributeType.BitMap8:
     case AttributeType.UInt8:
     case AttributeType.Enum:
       return payload.readUInt8(0)
