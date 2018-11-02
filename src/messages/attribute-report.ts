@@ -93,11 +93,13 @@ export class ZGAttributeReportMessage implements ZGMessage {
   label = 'attribute-report'
   payload: AttributeReportPayload
   payloadBuffer: Buffer
+  rssi: number
 
-  constructor(code: ZGMessageCode, payload: Buffer) {
+  constructor(code: ZGMessageCode, payload: Buffer, rssi: number) {
     this.code = code
     this.payloadBuffer = payload
     this.payload = fromBuffer(payload)
+    this.rssi = rssi
     debug(`message:${this.getLabel()}`)(this.payload)
   }
 
@@ -111,5 +113,9 @@ export class ZGAttributeReportMessage implements ZGMessage {
 
   getPayload(): AttributeReportPayload {
     return this.payload
+  }
+
+  getRSSI(): number {
+    return this.rssi
   }
 }

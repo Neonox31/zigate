@@ -3,6 +3,7 @@ import { MockZiGate } from '../../mocks/zigate'
 import { createZGMessage, ZGMessageCode } from '../../../src/message'
 import { TestScheduler } from 'rxjs/testing'
 import { ZGXiaomiAqaraDoorSensorDevice } from '../../../src/devices/xiaomi/aqara-door-sensor'
+import { ZGXiaomiAqaraButtonDevice } from '../../../src/devices/xiaomi/aqara-button'
 
 function assertDeepEqual(actual: any, expected: any) {
   expect(actual).toEqual(expected)
@@ -20,11 +21,13 @@ describe('ZGXiaomiDoorSensorDevice', () => {
       /*** GIVEN ***/
       const firstMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
       const secondMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -47,7 +50,8 @@ describe('ZGXiaomiDoorSensorDevice', () => {
       /*** GIVEN ***/
       const stateMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x98, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x1])
+        Buffer.from([0x98, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x1]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -69,7 +73,8 @@ describe('ZGXiaomiDoorSensorDevice', () => {
       /*** GIVEN ***/
       const stateMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x98, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x0])
+        Buffer.from([0x98, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x0]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -130,7 +135,8 @@ describe('ZGXiaomiDoorSensorDevice', () => {
           0x21,
           0x0,
           0x0
-        ])
+        ]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -147,6 +153,33 @@ describe('ZGXiaomiDoorSensorDevice', () => {
         b: {
           voltage: 3.065,
           level: 94
+        }
+      })
+    })
+  })
+
+  it('should emit messages about signal strength', () => {
+    scheduler.run(helpers => {
+      /*** GIVEN ***/
+      const signalMessage = createZGMessage(
+        ZGMessageCode.AttributeReport,
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        200
+      )
+
+      const zigate = new MockZiGate()
+
+      zigate.messages$ = helpers.hot('-a-', {
+        a: signalMessage
+      })
+
+      /*** WHEN ***/
+      const zgDevice = new ZGXiaomiAqaraDoorSensorDevice(zigate as ZiGate, 'fefe')
+
+      /*** THEN ***/
+      helpers.expectObservable(zgDevice.signal$).toBe('-b-', {
+        b: {
+          level: 78
         }
       })
     })

@@ -20,11 +20,13 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
       /*** GIVEN ***/
       const firstMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
       const secondMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -47,7 +49,8 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
       /*** GIVEN ***/
       const pushMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x1])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x10, 0x0, 0x1, 0x1]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -69,7 +72,8 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
       /*** GIVEN ***/
       const pushMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x80, 0x0, 0x0, 0x28, 0x0, 0x1, 0x2])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x80, 0x0, 0x0, 0x28, 0x0, 0x1, 0x2]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -91,7 +95,8 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
       /*** GIVEN ***/
       const pushMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x28, 0x0, 0x1, 0x3])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x6, 0x0, 0x0, 0x0, 0x28, 0x0, 0x1, 0x3]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -152,7 +157,8 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
           0x21,
           0x0,
           0x0
-        ])
+        ]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -169,6 +175,33 @@ describe('ZGXiaomiAqaraButtonDevice', () => {
         b: {
           voltage: 3.065,
           level: 94
+        }
+      })
+    })
+  })
+
+  it('should emit messages about signal strength', () => {
+    scheduler.run(helpers => {
+      /*** GIVEN ***/
+      const signalMessage = createZGMessage(
+        ZGMessageCode.AttributeReport,
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        200
+      )
+
+      const zigate = new MockZiGate()
+
+      zigate.messages$ = helpers.hot('-a-', {
+        a: signalMessage
+      })
+
+      /*** WHEN ***/
+      const zgDevice = new ZGXiaomiAqaraButtonDevice(zigate as ZiGate, 'fefe')
+
+      /*** THEN ***/
+      helpers.expectObservable(zgDevice.signal$).toBe('-b-', {
+        b: {
+          level: 78
         }
       })
     })

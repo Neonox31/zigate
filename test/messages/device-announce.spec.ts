@@ -8,7 +8,7 @@ describe('ZGDeviceAnnounceMessage', () => {
     const payload = Buffer.from([0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0x0])
 
     /*** WHEN ***/
-    const zgMsg = new ZGDeviceAnnounceMessage(code, payload)
+    const zgMsg = new ZGDeviceAnnounceMessage(code, payload, 100)
 
     /*** THEN ***/
     expect(zgMsg).toBeInstanceOf(ZGDeviceAnnounceMessage)
@@ -19,5 +19,6 @@ describe('ZGDeviceAnnounceMessage', () => {
       MACIEEAddress: 'fefefefefefefefe',
       MACCapability: 0
     })
+    expect(zgMsg.getRSSI()).toEqual(100)
   })
 })

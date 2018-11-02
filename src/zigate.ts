@@ -33,7 +33,7 @@ export class ZiGate {
       map((frame: Buffer) => {
         debug('serial:in')(frame)
         const zgFrame = new ZGFrame(frame)
-        return createZGMessage(zgFrame.readMsgCode(), zgFrame.msgPayloadBytes)
+        return createZGMessage(zgFrame.readMsgCode(), zgFrame.msgPayloadBytes, zgFrame.readRSSI())
       }),
       share()
     )

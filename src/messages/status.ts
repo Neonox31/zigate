@@ -19,10 +19,12 @@ export class ZGStatusMessage implements ZGMessage {
   code: ZGMessageCode
   label = 'status'
   payload: StatusPayload
+  rssi: number
 
-  constructor(code: ZGMessageCode, payload: Buffer) {
+  constructor(code: ZGMessageCode, payload: Buffer, rssi: number) {
     this.code = code
     this.payload = fromBuffer(payload)
+    this.rssi = rssi
     debug(`message:${this.getLabel()}`)(this.payload)
   }
 
@@ -36,5 +38,9 @@ export class ZGStatusMessage implements ZGMessage {
 
   getPayload(): StatusPayload {
     return this.payload
+  }
+
+  getRSSI(): number {
+    return this.rssi
   }
 }

@@ -10,8 +10,10 @@ import {
   CommonBatteryPayload,
   CommonBrightnessPayload,
   CommonMotionPayload,
-  CommonReedSwitchPayload
+  CommonReedSwitchPayload,
+  CommonSignalPayload
 } from '../../common'
+import { asCommonSignalPayload } from '../utils/signal'
 
 const motionMessages = (msg: ZGAttributeReportMessage) => {
   return (
@@ -55,6 +57,7 @@ export class ZGXiaomiAqaraMotionSensorV2Device implements ZGDevice {
   motion$: Observable<CommonMotionPayload>
   brightness$: Observable<CommonBrightnessPayload>
   battery$: Observable<CommonBatteryPayload>
+  signal$: Observable<CommonSignalPayload>
 
   constructor(zigate: ZiGate, shortAddress: string) {
     this.shortAddress = shortAddress
@@ -89,6 +92,13 @@ export class ZGXiaomiAqaraMotionSensorV2Device implements ZGDevice {
       map(msg => asCommonBatteryPayload(msg, BatteryType.CR2450)),
       tap((payload: CommonBatteryPayload) =>
         debug(`device:${this.label}:${this.shortAddress}:battery`)(payload)
+      )
+    )
+
+    this.signal$ = this.messages$.pipe(
+      map(asCommonSignalPayload),
+      tap((payload: CommonBatteryPayload) =>
+        debug(`device:${this.label}:${this.shortAddress}:signal`)(payload)
       )
     )
   }

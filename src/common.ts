@@ -3,6 +3,10 @@ export interface CommonBatteryPayload {
   level?: number
 }
 
+export interface CommonSignalPayload {
+  level?: number
+}
+
 export enum CommonSwitchState {
   Off = 'off',
   On = 'on'

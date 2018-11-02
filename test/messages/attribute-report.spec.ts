@@ -16,7 +16,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 100)
 
     /*** THEN ***/
     expect(zgMsg).toBeInstanceOf(ZGAttributeReportMessage)
@@ -33,6 +33,7 @@ describe('ZGAttributeReportMessage', () => {
       attributeData: true,
       attributeDataRaw: Buffer.from([0x1])
     })
+    expect(zgMsg.getRSSI()).toEqual(100)
   })
 
   it('should recognize null attribute type', () => {
@@ -42,7 +43,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(zgMsg.getPayload().attributeData).toBeNull()
@@ -57,7 +58,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -73,7 +74,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -89,7 +90,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -105,7 +106,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -121,7 +122,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -137,7 +138,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -153,7 +154,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -169,7 +170,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -185,7 +186,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('number')
@@ -200,7 +201,7 @@ describe('ZGAttributeReportMessage', () => {
     const payload = Buffer.concat([basePayload, attributeType, attributeSize, attributeData])
 
     /*** WHEN ***/
-    const zgMsg = new ZGAttributeReportMessage(code, payload)
+    const zgMsg = new ZGAttributeReportMessage(code, payload, 0)
 
     /*** THEN ***/
     expect(typeof zgMsg.getPayload().attributeData).toBe('string')
@@ -217,7 +218,7 @@ describe('ZGAttributeReportMessage', () => {
     /*** WHEN ***/
 
     /*** THEN ***/
-    expect(() => new ZGAttributeReportMessage(code, payload)).toThrowError(
+    expect(() => new ZGAttributeReportMessage(code, payload, 0)).toThrowError(
       `Unsupported attribute data type: ${attrType}`
     )
   })

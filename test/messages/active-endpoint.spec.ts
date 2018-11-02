@@ -8,7 +8,7 @@ describe('ZGActiveEndpointMessage', () => {
     const payload = Buffer.from([0xfe, 0xfe])
 
     /*** WHEN ***/
-    const zgMsg = new ZGActiveEndpointMessage(code, payload)
+    const zgMsg = new ZGActiveEndpointMessage(code, payload, 100)
 
     /*** THEN ***/
     expect(zgMsg).toBeInstanceOf(ZGActiveEndpointMessage)
@@ -17,5 +17,6 @@ describe('ZGActiveEndpointMessage', () => {
     expect(zgMsg.getPayload()).toEqual({
       shortAddress: 'fefe'
     })
+    expect(zgMsg.getRSSI()).toEqual(100)
   })
 })

@@ -20,10 +20,12 @@ export class ZGDeviceAnnounceMessage implements ZGMessage {
   code: ZGMessageCode
   label = 'device-announce'
   payload: DeviceAnnouncePayload
+  rssi: number
 
-  constructor(code: ZGMessageCode, payload: Buffer) {
+  constructor(code: ZGMessageCode, payload: Buffer, rssi: number) {
     this.code = code
     this.payload = fromBuffer(payload)
+    this.rssi = rssi
     debug(`message:${this.getLabel()}`)(this.payload)
   }
 
@@ -37,5 +39,9 @@ export class ZGDeviceAnnounceMessage implements ZGMessage {
 
   getPayload(): DeviceAnnouncePayload {
     return this.payload
+  }
+
+  getRSSI(): number {
+    return this.rssi
   }
 }

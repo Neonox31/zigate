@@ -40,7 +40,7 @@ describe('ZGGetDevicesListMessage', () => {
     const payload = Buffer.concat([firstDevice, secondDevice])
 
     /*** WHEN ***/
-    const zgMsg = new ZGGetDevicesListMessage(code, payload)
+    const zgMsg = new ZGGetDevicesListMessage(code, payload, 100)
 
     /*** THEN ***/
     expect(zgMsg).toBeInstanceOf(ZGGetDevicesListMessage)
@@ -62,5 +62,6 @@ describe('ZGGetDevicesListMessage', () => {
         linkQuality: 100
       }
     ])
+    expect(zgMsg.getRSSI()).toEqual(100)
   })
 })

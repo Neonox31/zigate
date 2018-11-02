@@ -8,7 +8,7 @@ describe('ZGStatusMessage', () => {
     const payload = Buffer.from([0x0, 0x0, 0x0, 0x49])
 
     /*** WHEN ***/
-    const zgMsg = new ZGStatusMessage(code, payload)
+    const zgMsg = new ZGStatusMessage(code, payload, 100)
 
     /*** THEN ***/
     expect(zgMsg).toBeInstanceOf(ZGStatusMessage)
@@ -19,5 +19,6 @@ describe('ZGStatusMessage', () => {
       sequenceNumber: 0,
       packetType: 73
     })
+    expect(zgMsg.getRSSI()).toEqual(100)
   })
 })

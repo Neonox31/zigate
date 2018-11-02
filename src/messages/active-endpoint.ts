@@ -15,10 +15,12 @@ export class ZGActiveEndpointMessage implements ZGMessage {
   code: ZGMessageCode
   label = 'active-endpoint'
   payload: ActiveEndpointPayload
+  rssi: number
 
-  constructor(code: ZGMessageCode, payload: Buffer) {
+  constructor(code: ZGMessageCode, payload: Buffer, rssi: number) {
     this.code = code
     this.payload = fromBuffer(payload)
+    this.rssi = rssi
     debug(`message:${this.getLabel()}`)(this.payload)
   }
 
@@ -32,5 +34,9 @@ export class ZGActiveEndpointMessage implements ZGMessage {
 
   getPayload(): ActiveEndpointPayload {
     return this.payload
+  }
+
+  getRSSI(): number {
+    return this.rssi
   }
 }

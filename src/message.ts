@@ -9,6 +9,7 @@ export interface ZGMessage {
   getCode(): ZGMessageCode
   getLabel(): string
   getPayload(): ZGMessagePayload
+  getRSSI(): number
 }
 
 export enum ZGMessageCode {
@@ -26,19 +27,19 @@ export type ZGMessagePayload =
   | ActiveEndpointPayload
   | GetDevicesListPayload
 
-export function createZGMessage(code: ZGMessageCode, payload: Buffer): ZGMessage {
+export function createZGMessage(code: ZGMessageCode, payload: Buffer, rssi: number): ZGMessage {
   debug(`message`)(`new from code: %d`, code)
   switch (code) {
     case ZGMessageCode.AttributeReport:
-      return new ZGAttributeReportMessage(code, payload)
+      return new ZGAttributeReportMessage(code, payload, rssi)
     case ZGMessageCode.Status:
-      return new ZGStatusMessage(code, payload)
+      return new ZGStatusMessage(code, payload, rssi)
     case ZGMessageCode.DeviceAnnounce:
-      return new ZGDeviceAnnounceMessage(code, payload)
+      return new ZGDeviceAnnounceMessage(code, payload, rssi)
     case ZGMessageCode.ActiveEndpoint:
-      return new ZGActiveEndpointMessage(code, payload)
+      return new ZGActiveEndpointMessage(code, payload, rssi)
     case ZGMessageCode.GetDevicesList:
-      return new ZGGetDevicesListMessage(code, payload)
+      return new ZGGetDevicesListMessage(code, payload, rssi)
     default:
       throw new Error(`Unsupported message code : ${code}`)
   }

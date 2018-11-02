@@ -6,7 +6,8 @@ import { asAttributeReportMessage, ZGMessageCode } from '../../message'
 import { ZGAttributeReportMessage } from '../../messages/attribute-report'
 import debug from '../../debug'
 import { asCommonBatteryPayload, BatteryType } from './utils/battery'
-import { CommonBatteryPayload, CommonPushSwitchPayload } from '../../common'
+import { CommonBatteryPayload, CommonPushSwitchPayload, CommonSignalPayload } from '../../common'
+import { asCommonSignalPayload } from '../utils/signal'
 
 const pushesMessages = (msg: ZGAttributeReportMessage) => {
   return (
@@ -33,6 +34,7 @@ export class ZGXiaomiAqaraButtonDevice implements ZGDevice {
   messages$: Observable<ZGAttributeReportMessage>
   pushes$: Observable<CommonPushSwitchPayload>
   battery$: Observable<CommonBatteryPayload>
+  signal$: Observable<CommonSignalPayload>
 
   constructor(zigate: ZiGate, shortAddress: string) {
     this.shortAddress = shortAddress
@@ -59,6 +61,13 @@ export class ZGXiaomiAqaraButtonDevice implements ZGDevice {
       map(msg => asCommonBatteryPayload(msg, BatteryType.CR2032)),
       tap((payload: CommonBatteryPayload) =>
         debug(`device:${this.label}:${this.shortAddress}:battery`)(payload)
+      )
+    )
+
+    this.signal$ = this.messages$.pipe(
+      map(asCommonSignalPayload),
+      tap((payload: CommonBatteryPayload) =>
+        debug(`device:${this.label}:${this.shortAddress}:signal`)(payload)
       )
     )
   }

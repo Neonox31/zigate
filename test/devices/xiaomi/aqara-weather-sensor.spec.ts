@@ -3,6 +3,7 @@ import { MockZiGate } from '../../mocks/zigate'
 import { createZGMessage, ZGMessageCode } from '../../../src/message'
 import { TestScheduler } from 'rxjs/testing'
 import { ZGXiaomiAqaraWeatherSensorDevice } from '../../../src/devices/xiaomi/aqara-weather-sensor'
+import { ZGXiaomiAqaraMotionSensorV2Device } from '../../../src/devices/xiaomi/aqara-motion-sensor-v2'
 
 function assertDeepEqual(actual: any, expected: any) {
   expect(actual).toEqual(expected)
@@ -20,11 +21,13 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
       /*** GIVEN ***/
       const firstMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xff, 0xff, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
       const secondMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -47,7 +50,8 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
       /*** GIVEN ***/
       const temperatureMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x6, 0xfe, 0xfe, 0x1, 0x4, 0x2, 0x0, 0x0, 0x0, 0x29, 0x0, 0x2, 0xb, 0x34])
+        Buffer.from([0x6, 0xfe, 0xfe, 0x1, 0x4, 0x2, 0x0, 0x0, 0x0, 0x29, 0x0, 0x2, 0xb, 0x34]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -69,7 +73,8 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
       /*** GIVEN ***/
       const humidityMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x7, 0xfe, 0xfe, 0x1, 0x4, 0x5, 0x0, 0x0, 0x0, 0x21, 0x0, 0x2, 0x16, 0x8])
+        Buffer.from([0x7, 0xfe, 0xfe, 0x1, 0x4, 0x5, 0x0, 0x0, 0x0, 0x21, 0x0, 0x2, 0x16, 0x8]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -91,7 +96,8 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
       /*** GIVEN ***/
       const pressureMessage = createZGMessage(
         ZGMessageCode.AttributeReport,
-        Buffer.from([0x8, 0xfe, 0xfe, 0x1, 0x4, 0x3, 0x0, 0x0, 0x0, 0x29, 0x0, 0x2, 0x3, 0xf5])
+        Buffer.from([0x8, 0xfe, 0xfe, 0x1, 0x4, 0x3, 0x0, 0x0, 0x0, 0x29, 0x0, 0x2, 0x3, 0xf5]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -152,7 +158,8 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
           0x21,
           0x0,
           0x0
-        ])
+        ]),
+        0
       )
 
       const zigate = new MockZiGate()
@@ -169,6 +176,33 @@ describe('ZGXiaomiWeatherSensorDevice', () => {
         b: {
           voltage: 3.065,
           level: 94
+        }
+      })
+    })
+  })
+
+  it('should emit messages about signal strength', () => {
+    scheduler.run(helpers => {
+      /*** GIVEN ***/
+      const signalMessage = createZGMessage(
+        ZGMessageCode.AttributeReport,
+        Buffer.from([0x0, 0xfe, 0xfe, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0]),
+        200
+      )
+
+      const zigate = new MockZiGate()
+
+      zigate.messages$ = helpers.hot('-a-', {
+        a: signalMessage
+      })
+
+      /*** WHEN ***/
+      const zgDevice = new ZGXiaomiAqaraWeatherSensorDevice(zigate as ZiGate, 'fefe')
+
+      /*** THEN ***/
+      helpers.expectObservable(zgDevice.signal$).toBe('-b-', {
+        b: {
+          level: 78
         }
       })
     })

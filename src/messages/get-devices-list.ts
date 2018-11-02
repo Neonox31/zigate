@@ -45,10 +45,12 @@ export class ZGGetDevicesListMessage implements ZGMessage {
   code: ZGMessageCode
   label = 'get-devices-list'
   payload: GetDevicesListPayload
+  rssi: number
 
-  constructor(code: ZGMessageCode, payload: Buffer) {
+  constructor(code: ZGMessageCode, payload: Buffer, rssi: number) {
     this.code = code
     this.payload = fromBuffer(payload)
+    this.rssi = rssi
     debug(`message:${this.getLabel()}`)(this.payload)
   }
 
@@ -62,5 +64,9 @@ export class ZGGetDevicesListMessage implements ZGMessage {
 
   getPayload(): GetDevicesListPayload {
     return this.payload
+  }
+
+  getRSSI(): number {
+    return this.rssi
   }
 }

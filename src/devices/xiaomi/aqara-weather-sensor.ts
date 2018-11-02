@@ -10,8 +10,10 @@ import {
   CommonBatteryPayload,
   CommonHumidityPayload,
   CommonPressurePayload,
+  CommonSignalPayload,
   CommonTemperaturePayload
 } from '../../common'
+import { asCommonSignalPayload } from '../utils/signal'
 
 const temperatureMessages = (msg: ZGAttributeReportMessage) => {
   return (
@@ -73,6 +75,7 @@ export class ZGXiaomiAqaraWeatherSensorDevice implements ZGDevice {
   humidity$: Observable<CommonHumidityPayload>
   pressure$: Observable<CommonPressurePayload>
   battery$: Observable<CommonBatteryPayload>
+  signal$: Observable<CommonSignalPayload>
 
   constructor(zigate: ZiGate, shortAddress: string) {
     this.shortAddress = shortAddress
@@ -115,6 +118,13 @@ export class ZGXiaomiAqaraWeatherSensorDevice implements ZGDevice {
       map(msg => asCommonBatteryPayload(msg, BatteryType.CR1632)),
       tap((payload: CommonBatteryPayload) =>
         debug(`device:${this.label}:${this.shortAddress}:battery`)(payload)
+      )
+    )
+
+    this.signal$ = this.messages$.pipe(
+      map(asCommonSignalPayload),
+      tap((payload: CommonBatteryPayload) =>
+        debug(`device:${this.label}:${this.shortAddress}:signal`)(payload)
       )
     )
   }
